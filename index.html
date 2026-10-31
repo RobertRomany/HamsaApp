@@ -21,13 +21,16 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 :root[data-theme="dark"]{--bg:#1C1213;--sf:#291E1F;--ink:#F4EADF;--mu:#CDBDB8;--ln:#4F4142;--br:#EFA6B0;--gd:#D8B06A;--gs:#4A3818}
 html{scroll-snap-type:y proximity;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+button{-webkit-tap-highlight-color:transparent}
+.prog{position:fixed;inset:0 0 auto;height:3px;z-index:6;background:#D8B06A;transform-origin:right;transform:scaleX(0)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.8 Cairo,system-ui,sans-serif}
 :focus-visible{outline:3px solid var(--gd);outline-offset:3px}
 .brand{display:flex;align-items:center;gap:10px}
 .mark{display:block;border-radius:22%}
 .hero-mark{margin-bottom:20px;box-shadow:0 12px 32px rgba(0,0,0,.4)}
 .logo{font-family:'Reem Kufi',Cairo,sans-serif;font-weight:600}
-.s{min-height:100svh;display:flex;align-items:center;scroll-snap-align:start;padding:96px 7vw 72px}
+.s{min-height:100vh;min-height:100svh;display:flex;align-items:center;scroll-snap-align:start;overflow-x:clip;padding:96px max(7vw,env(safe-area-inset-right,0px)) 72px max(7vw,env(safe-area-inset-left,0px))}
 .w{max-width:1080px;width:100%;margin:auto}
 h1,h2,h3{margin:0;line-height:1.3;font-weight:800}
 h2{font-size:clamp(30px,4.8vw,56px);max-width:18ch}
@@ -37,7 +40,7 @@ p{margin:0}
 .mu{color:var(--mu)}
 
 /* bar + dots */
-.bar{position:fixed;inset:0 0 auto;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) 5vw 10px;background:rgba(28,18,19,.62);backdrop-filter:blur(10px);color:#F8F4EC}
+.bar{position:fixed;inset:0 0 auto;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) 5vw 10px;background:rgba(28,18,19,.9);backdrop-filter:blur(10px);color:#F8F4EC}
 .bar .logo{font-size:26px}
 .bar button{min-height:44px;padding:0 18px;border:1px solid rgba(248,244,236,.5);border-radius:22px;background:none;color:inherit;font:600 15px Cairo,sans-serif;cursor:pointer}
 .dots{position:fixed;inset-inline-start:14px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:4px}
@@ -131,10 +134,32 @@ ol p{color:var(--mu);margin-top:4px;max-width:44ch}
  .sg>div,.sg>div+div{padding:20px 0;border:0}
  .sg>div+div{border-top:2px solid var(--ln)}
 }
+@media(max-width:820px){
+ html{scroll-snap-type:none}
+ .s{padding-top:84px;padding-bottom:52px}
+ .bar{padding-inline:max(5vw,env(safe-area-inset-right,0px)) max(5vw,env(safe-area-inset-left,0px))}
+ #pres{display:none}
+ .hero-mark{width:72px;height:72px;margin-bottom:14px}
+ .tag{margin-bottom:12px}
+ .sub{font-size:17px}
+ .cta{flex-direction:column;align-items:stretch}
+ .hg{gap:12px}
+ .stage{min-height:0;padding:24px 0 8px}
+ .rp{width:240px;height:240px}
+ .pg{gap:32px}
+ .sg h3{font-size:24px}
+ ol{margin-top:32px}
+ ol li{padding-inline-start:34px}
+ ol h3{font-size:22px}
+ .big{max-width:none}
+ .idea p{font-size:18px}
+}
+@media(max-height:520px){.s{min-height:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<div class="prog" id="prog" aria-hidden="true"></div>
 <header class="bar"><span class="brand"><img class="mark" src="assets/icon.svg" alt="" width="36" height="36"><span class="logo">همسة</span></span><button id="pres" type="button">وضع العرض</button></header>
 <nav class="dots" id="dots" aria-label="الشرائح"></nav>
 
@@ -191,7 +216,7 @@ ol p{color:var(--mu);margin-top:4px;max-width:44ch}
  <div class="w pg">
   <div>
    <h2>اسمك مخفي عن أبونا لو اخترت مجهول</h2>
-   <p class="fine">أبونا اللي اخترته بس هو اللي بيشوف رسالتك.</p>
+   <p class="fine">أبونا اللي اخترته بس هو اللي بيشوف رسالتك. وإدارة التطبيق وحدها تقدر تتعرف على المرسل، وده لو فيه خطر على حد أو إساءة.</p>
   </div>
   <div class="inbox">
    <h3>كده بتظهر عند أبونا</h3>
@@ -216,9 +241,9 @@ ol p{color:var(--mu);margin-top:4px;max-width:44ch}
    <div>
     <h3>للأب الكاهن</h3>
     <ul>
-     <li><b>الرئيسية:</b> الرسائل اللي وصلت لقدسك.</li>
-     <li><b>الرسائل:</b> افتح الرسالة ورد عليها من جوه.</li>
-     <li><b>الإعدادات:</b> حساب قدسك، وبيتفعل من إدارة التطبيق.</li>
+     <li><b>الرئيسية:</b> الرسائل اللي وصلتك أنت بس.</li>
+     <li><b>الرسائل:</b> افتح الرسالة ورد عليها من جوّه.</li>
+     <li><b>الإعدادات:</b> حسابك، وبيتفعّل من إدارة التطبيق.</li>
     </ul>
    </div>
   </div>
@@ -256,7 +281,11 @@ addEventListener('keydown',e=>{
  if(nx.includes(e.key)||(e.key===' '&&e.target===document.body)){e.preventDefault();go(i+1)}
  else if(pv.includes(e.key)){e.preventDefault();go(i-1)}
 });
-document.getElementById('pres').onclick=()=>{
+const pres=document.getElementById('pres');
+if(!document.documentElement.requestFullscreen)pres.hidden=true;
+const prog=document.getElementById('prog');let tk=0;
+addEventListener('scroll',()=>{if(tk)return;tk=requestAnimationFrame(()=>{tk=0;const m=document.documentElement.scrollHeight-innerHeight;prog.style.transform='scaleX('+(m>0?Math.min(1,scrollY/m):0)+')'})},{passive:true});
+pres.onclick=()=>{
  try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(_){}
 };
 document.querySelectorAll('.store').forEach(b=>b.onclick=()=>{
